@@ -1,0 +1,21 @@
+# Dependencias de Node
+node_modules/
+
+# Variables de entorno y credenciales (MongoDB URI, puertos, claves secretas)
+.env
+.env.local
+.env.development
+.env.production
+
+# Archivos de registros y depuración
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
+
+# Archivos del sistema operativo y editores de código
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
