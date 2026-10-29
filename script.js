@@ -1,127 +1,324 @@
 
 const chat = document.getElementById("chat");
 const formulario = document.getElementById("formChisme");
-
 const nombre = document.getElementById("nombre");
 const mensaje = document.getElementById("mensaje");
+const tituloTema = document.getElementById("tituloTema");
 
-// Aqui guardamos los chismes
-let chismes = [];
+const respondiendoA = document.getElementById("respondiendoA");
+const textoRespuesta = document.getElementById("textoRespuesta");
+const mensajeRespuesta = document.getElementById("mensajeRespuesta");
+const cancelarRespuesta = document.getElementById("cancelarRespuesta");
 
-// Publicar un chisme
-formulario.addEventListener("submit", function(event) {
-    event.preventDefault();
+// Guardamos los chismes de cada tema por separado
+const temas = {};
 
-    // Obtenemos lo que escribio el usuario
-    let nuevoChisme = {
-        nombre: nombre.value,
-        mensaje: mensaje.value,
-        respuestas: []
+let temaActual = "";
+let chismeResponder = null;
+
+// Creamos una lista de chismes para cada tema del HTML
+
+const listaTemas = document.getElementById("listaTemas");
+const botonNuevoTema = document.getElementById("nuevoTema");
+const formularioNuevoTema = document.getElementById("formNuevoTema");
+const nombreTema = document.getElementById("nombreTema");
+const guardarTema = document.getElementById("guardarTema");
+const cancelarTema = document.getElementById("cancelarTema");
+
+// Aquí guardaremos los nombres de los temas
+const nombresTemas = [];
+
+// Agregar un tema a la lista
+
+function agregarTema(titulo) {
+    const elemento = document.createElement("div");
+    elemento.className = "tema";
+
+    const informacion = document.createElement("div");
+    informacion.className = "info-tema";
+
+    const nombre = document.createElement("h5");
+    nombre.textContent = titulo;
+
+    const vistaPrevia = document.createElement("p");
+    vistaPrevia.textContent = "Todavía no hay chismes";
+
+    // Crear el botón X
+    const botonEliminar = document.createElement("button");
+    botonEliminar.type = "button";
+    botonEliminar.className = "boton-eliminar-tema";
+    botonEliminar.textContent = "×";
+    botonEliminar.title = "Eliminar tema";
+
+    // Organizar los elementos
+    informacion.append(nombre, vistaPrevia);
+    elemento.append(informacion, botonEliminar);
+    listaTemas.appendChild(elemento);
+
+    // Guardar el nombre del tema
+    nombresTemas.push(titulo);
+
+    // Crear su espacio para guardar los chismes
+    temas[titulo] = {
+        chismes: []
     };
 
-    // Agregamos el chisme a la lista
-    chismes.push(nuevoChisme);
+    // Abrir el tema al hacer clic en su tarjeta
+    elemento.addEventListener("click", function() {
+        abrirTema(elemento, titulo);
+    });
 
-    // Limpiamos los campos
-    formulario.reset();
+    // Eliminar el tema al pulsar la X
+    botonEliminar.addEventListener("click", function(event) {
+        event.stopPropagation();
+        eliminarTema(titulo, elemento);
+    });
 
-    // Mostramos los chismes
-    mostrarChismes();
+    return elemento;
+}
+
+
+
+function eliminarTema(titulo, elemento) {
+    const confirmar = confirm(
+        `¿Seguro que deseas eliminar el tema "${titulo}" y sus chismes?`
+    );
+
+    if (!confirmar) return;
+
+    // Eliminar el tema de la lista y de los datos
+    elemento.remove();
+    delete temas[titulo];
+
+    const indice = nombresTemas.indexOf(titulo);
+    if (indice !== -1) {
+        nombresTemas.splice(indice, 1);
+    }
+
+    // Si eliminamos el tema seleccionado, limpiar la conversación
+    if (temaActual === titulo) {
+        temaActual = "";
+        tituloTema.textContent = "Selecciona un tema";
+        chat.innerHTML = `
+            <div class="mensaje-vacio">
+                <div class="iconos-vacios">💬</div>
+                <h4>Selecciona o crea un tema</h4>
+                <p>¡Aquí aparecerán los chismes!</p>
+            </div>
+        `;
+
+        cancelarRespuestaActual();
+    }
+}
+
+// Mostrar u ocultar el formulario
+botonNuevoTema.addEventListener("click", function() {
+    formularioNuevoTema.hidden = false;
+    nombreTema.focus();
 });
 
-// Mostrar todos los chismes
+cancelarTema.addEventListener("click", function() {
+    formularioNuevoTema.hidden = true;
+    nombreTema.value = "";
+});
+
+// Crear el tema
+guardarTema.addEventListener("click", function() {
+    const titulo = nombreTema.value.trim();
+
+    if (titulo === "") {
+        nombreTema.focus();
+        return;
+    }
+
+    // Evitar nombres duplicados
+    const existe = nombresTemas.some(function(nombre) {
+        return nombre.toLowerCase() === titulo.toLowerCase();
+    });
+
+    if (existe) {
+        alert("Ya existe un tema con ese nombre.");
+        return;
+    }
+
+    const elemento = agregarTema(titulo);
+
+    // Limpiar y cerrar el formulario
+    nombreTema.value = "";
+    formularioNuevoTema.hidden = true;
+
+    // Abrir el tema recién creado
+    abrirTema(elemento, titulo);
+});
+
+// Crear algunos temas iniciales
+[ 
+    "Deportes", "Vida universitaria", "Entretenimiento", "Tecnología"
+].forEach(function(titulo) {
+    agregarTema(titulo);
+});
+
+// Abrir el primer tema al iniciar
+if (listaTemas.firstElementChild) {
+    const primerTema = listaTemas.firstElementChild;
+    abrirTema(
+        primerTema,
+        primerTema.querySelector("h5").textContent
+    );
+}
+
+
+// Abrir una conversación
+function abrirTema(elemento, titulo) {
+    temaActual = titulo;
+
+    // Quitar selección del tema anterior
+    document.querySelectorAll(".tema").forEach(function(tema) {
+    tema.classList.remove("activo");
+});
+
+    // Marcar el tema seleccionado
+    elemento.classList.add("activo");
+
+    // Cambiar el título de la conversación
+    tituloTema.textContent = titulo;
+
+    // Cancelar una respuesta si cambiamos de tema
+    cancelarRespuestaActual();
+
+    // Mostrar los chismes del tema seleccionado
+    mostrarChismes();
+}
+
+// Mostrar los chismes del tema actual
 function mostrarChismes() {
     chat.innerHTML = "";
 
-    // Recorremos la lista de chismes
-    for (let i = 0; i < chismes.length; i++) {
-        mostrarUno(chismes[i], chat);
+    const listaChismes = temas[temaActual].chismes;
+
+    if (listaChismes.length === 0) {
+        const mensajeInicial = document.createElement("div");
+        mensajeInicial.className = "mensaje-vacio";
+
+        const icono = document.createElement("div");
+        icono.className = "iconos-vacios";
+        icono.textContent = "💬";
+
+        const titulo = document.createElement("h4");
+        titulo.textContent = "Sé el primer chismoso";
+
+        const texto = document.createElement("p");
+        texto.textContent = "¡Cuéntanos qué sabes!";
+
+        mensajeInicial.append(icono, titulo, texto);
+        chat.appendChild(mensajeInicial);
+        return;
     }
+
+    // Mostrar cada publicación
+    listaChismes.forEach(function(chisme) {
+        mostrarUno(chisme, chat);
+    });
 }
 
-// Mostrar un chisme o una respuesta
+// Mostrar una publicación y sus respuestas
 function mostrarUno(chisme, lugar) {
-    let publicacion = document.createElement("div");
+    const publicacion = document.createElement("div");
     publicacion.className = "publicacion";
 
-    let autor = document.createElement("strong");
+    const autor = document.createElement("strong");
     autor.textContent = chisme.nombre;
 
-    let texto = document.createElement("p");
+    const texto = document.createElement("p");
     texto.className = "mensaje-texto";
     texto.textContent = chisme.mensaje;
 
-    let boton = document.createElement("button");
-    boton.textContent = "Responder";
-    boton.className = "btn-responder";
+    const boton = document.createElement("button");
     boton.type = "button";
+    boton.className = "btn-responder";
+    boton.textContent = "Responder";
 
-    publicacion.appendChild(autor);
-    publicacion.appendChild(texto);
-    publicacion.appendChild(boton);
-
-    lugar.appendChild(publicacion);
-
-    // Crear una respuesta
-    
-    // Crear el formulario para responder
+    // Al pulsar responder, usamos el cuadro de abajo
     boton.addEventListener("click", function() {
-
-        // Evitar que aparezcan varios formularios
-        if (publicacion.querySelector("form")) {
-            return;
-        }
-
-        let formularioRespuesta = document.createElement("form");
-        formularioRespuesta.className = "form-respuesta";
-
-        let nombreRespuesta = document.createElement("input");
-        nombreRespuesta.className = "form-control mb-2";
-        nombreRespuesta.placeholder = "Tu nombre";
-        nombreRespuesta.required = true;
-
-        let mensajeRespuesta = document.createElement("textarea");
-        mensajeRespuesta.className = "form-control mb-2";
-        mensajeRespuesta.placeholder = "Escribe tu respuesta";
-        mensajeRespuesta.required = true;
-
-        let enviar = document.createElement("button");
-        enviar.type = "submit";
-        enviar.className = "btn btn-sm btn-primary";
-        enviar.textContent = "Responder";
-
-        formularioRespuesta.append(
-            nombreRespuesta,
-            mensajeRespuesta,
-            enviar
-        );
-
-        publicacion.appendChild(formularioRespuesta);
-
-        formularioRespuesta.addEventListener("submit", function(event) {
-            event.preventDefault();
-
-            let respuesta = {
-                nombre: nombreRespuesta.value.trim(),
-                mensaje: mensajeRespuesta.value.trim(),
-                respuestas: []
-            };
-
-            if (respuesta.nombre && respuesta.mensaje) {
-                chisme.respuestas.push(respuesta);
-                mostrarChismes();
-            }
-        });
+        seleccionarRespuesta(chisme);
     });
 
+    publicacion.append(autor, texto, boton);
+    lugar.appendChild(publicacion);
 
-    // Mostrar las respuestas debajo del chisme
-    for (let i = 0; i < chisme.respuestas.length; i++) {
-        let espacio = document.createElement("div");
-        espacio.className = "respuesta";
+    // Mostrar respuestas debajo de esta publicación
+    if (chisme.respuestas.length > 0) {
+        const listaRespuestas = document.createElement("div");
+        listaRespuestas.className = "lista-respuestas";
 
-        lugar.appendChild(espacio);
+        chisme.respuestas.forEach(function(respuesta) {
+            mostrarUno(respuesta, listaRespuestas);
+        });
 
-        mostrarUno(chisme.respuestas[i], espacio);
+        lugar.appendChild(listaRespuestas);
     }
 }
+
+// Preparar una respuesta en el cuadro inferior
+function seleccionarRespuesta(chisme) {
+    chismeResponder = chisme;
+
+    textoRespuesta.textContent = "Respondiendo a " + chisme.nombre;
+    mensajeRespuesta.textContent = chisme.mensaje;
+
+    respondiendoA.hidden = false;
+
+    // Llevar el cursor al campo del mensaje
+    mensaje.focus();
+}
+
+// Cancelar la respuesta
+function cancelarRespuestaActual() {
+    chismeResponder = null;
+    respondiendoA.hidden = true;
+    textoRespuesta.textContent = "";
+    mensajeRespuesta.textContent = "";
+}
+
+// Botón X
+cancelarRespuesta.addEventListener("click", function() {
+    cancelarRespuestaActual();
+    mensaje.focus();
+});
+
+// Publicar un chisme o una respuesta
+formulario.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const nombreEscrito = nombre.value.trim();
+    const mensajeEscrito = mensaje.value.trim();
+
+    if (!nombreEscrito || !mensajeEscrito || !temaActual) {
+        return;
+    }
+
+    const nuevoChisme = {
+        nombre: nombreEscrito,
+        mensaje: mensajeEscrito,
+        respuestas: []
+    };
+
+    if (chismeResponder) {
+        // Agregar la respuesta a la publicación seleccionada
+        chismeResponder.respuestas.push(nuevoChisme);
+    } else {
+        // Agregar un nuevo chisme al tema actual
+        temas[temaActual].chismes.push(nuevoChisme);
+    }
+
+    // Limpiar solo el mensaje; conservar el alias
+    mensaje.value = "";
+
+    // Salir del modo de respuesta
+    cancelarRespuestaActual();
+
+    // Actualizar la conversación
+    mostrarChismes();
+});
+
+

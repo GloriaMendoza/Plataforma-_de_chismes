@@ -13,33 +13,106 @@
 
 <body>
 
-    <div class="container py-4">
-        <h1 class="text-center mb-4">Chismes UNAH</h1>
 
-        <!-- Area de publicaciones -->
-        <div id="chat">
-            <p id="mensajeInicial" class="text-center text-muted">
-                se el primer chismoso
-            </p>
+<div class="pagina">
+
+    <!-- Lista de temas -->
+    <div class="panel-temas">
+
+        <h2 class="titulo">Chismes UNAH</h2>
+
+        <input type="text" id="buscarTema"
+            class="form-control buscador"
+            placeholder="🔎 Buscar tema...">
+
+        <div id="listaTemas"></div>
+
+            <button type="button" id="nuevoTema" class="btn boton-tema">
+                + Nuevo tema
+            </button>
+
+        
+        <div id="formNuevoTema" class="form-nuevo-tema" hidden>
+            <label for="nombreTema">Nombre del tema</label>
+
+                <input type="text" id="nombreTema" class="form-control"
+                placeholder="Ej. Vida universitaria" maxlength="60">
+
+            <div class="botones-tema">
+                <button type="button" id="guardarTema" class="btn boton-publicar">
+                    Crear tema
+                </button>
+
+                <button type="button" id="cancelarTema" class="btn btn-light">
+                    Cancelar
+                </button>
+            </div>
         </div>
 
-        <!-- Formulario principal -->
-        <form id="formChisme" class="formulario">
-            <div class="mb-3">
-                <label for="nombre" class="form-label">Usuario</label>
-                <input type="text" id="nombre" class="form-control"
-                    placeholder="te recomiendo un alias" required>
-            </div>
 
-            <div class="mb-3">
-                <label for="mensaje" class="form-label">comencemos a chismear</label>
-                <textarea id="mensaje" class="form-control" rows="3"
-                    placeholder="¿Qué cuentas?" required></textarea>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Publicar chisme</button>
-        </form>
     </div>
+
+    <!-- Conversación -->
+    <div class="panel-conversacion">
+
+        <div class="encabezado-chat">
+            <h2 id="tituloTema">Selecciona un tema</h2>
+        </div>
+
+        <!-- Aquí aparecerán las publicaciones -->
+        <div id="chat" class="area-chat">
+
+            <div id="mensajeInicial" class="mensaje-vacio">
+                <div class="iconos-vacios">💬</div>
+                <h4>Sé el primer chismoso</h4>
+                <p>¡Cuéntanos qué sabes!</p>
+            </div>
+
+        </div>
+
+        <!-- Formulario -->
+        <form id="formChisme" class="formulario">
+
+            <div class="mb-3">
+
+            <div id="respondiendoA" class="respondiendo" hidden>
+                <div>
+                    <strong id="textoRespuesta">Respondiendo a...</strong>
+                        <p id="mensajeRespuesta"></p>
+                </div>
+
+                <button type="button" id="cancelarRespuesta"
+                    class="boton-cancelar" aria-label="Cancelar respuesta">
+                        ×
+                </button>
+            </div>
+
+                
+                <label for="nombre" class="form-label">Usuario</label>
+                <input type="text" id="nombre"
+                    class="form-control"
+                    placeholder="Te recomiendo un alias" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="mensaje" class="form-label">
+                    Comencemos a chismear
+                </label>
+                <textarea id="mensaje" class="form-control"
+                    rows="3" placeholder="¿Qué cuentas?"
+                    required></textarea>
+            </div>
+
+            <button type="submit" class="btn boton-publicar">
+                ➤ Publicar chisme
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
 
     <script src="script.js"></script>
 

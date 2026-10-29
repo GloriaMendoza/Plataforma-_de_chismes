@@ -1,59 +1,554 @@
 
 body {
-    background-color: #f5f5f8;
-    color: #292936;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #f0edff, #fff1f5, #eef8f5);
+    color: #25264b;
 }
 
-h1 {
+/* Distribución general */
+.pagina {
+    display: flex;
+    gap: 16px;
+    padding: 24px;
+    min-height: 100vh;
+}
+
+/* Panel izquierdo */
+.panel-temas {
+    width: 33%;
+    max-width: 470px;
+    min-width: 300px;
+    padding: 22px;
+    background-color: rgba(255, 255, 255, 0.88);
+    border: 1px solid #e8e1ff;
+    border-radius: 18px;
+}
+
+.titulo {
+    font-size: 30px;
+    font-weight: bold;
+    color: #292653;
+    margin-bottom: 22px;
+}
+
+.buscador {
+    border: 1px solid #ded8fb;
+    border-radius: 14px;
+    padding: 13px;
+    margin-bottom: 18px;
+}
+
+/* Lista de temas */
+.tema {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 12px;
+    margin-bottom: 10px;
+    background-color: #ffffff;
+    border: 1px solid #f0edf9;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.tema:hover {
+    background-color: #faf7ff;
+    transform: translateY(-2px);
+}
+
+.tema.activo {
+    background-color: #e9e4ff;
+    border-left: 6px solid #8871ed;
+}
+
+.icono {
+    width: 54px;
+    height: 54px;
+    min-width: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 25px;
+}
+
+.icono-lila {
+    background-color: #c9c2ff;
+}
+
+.icono-rosa {
+    background-color: #ffc4d5;
+}
+
+.icono-menta {
+    background-color: #bdebe0;
+}
+
+.icono-durazno {
+    background-color: #ffd4b5;
+}
+
+.icono-azul {
+    background-color: #c1d5ff;
+}
+
+.info-tema {
+    flex: 1;
+    min-width: 0;
+}
+
+.info-tema h5 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 0 7px;
+}
+
+.info-tema p {
+    font-size: 13px;
+    color: #777b9e;
+    margin: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.hora {
+    font-size: 12px;
+    color: #777b9e;
+    align-self: flex-start;
+}
+
+/* Botón para crear temas */
+.boton-tema {
+    width: 100%;
+    padding: 13px;
+    margin-top: 12px;
+    color: #7460d9;
+    background-color: #eee8ff;
+    border: none;
+    border-radius: 13px;
     font-weight: bold;
 }
 
-#chat {
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+.boton-tema:hover {
+    background-color: #dfd5ff;
+    color: #5542b5;
+}
+
+/* Panel derecho */
+.panel-conversacion {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 22px;
+    background-color: rgba(255, 255, 255, 0.92);
+    border: 1px solid #e8e1ff;
+    border-radius: 18px;
+}
+
+/* Encabezado del tema */
+.encabezado-chat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px;
+    background: linear-gradient(110deg, #f0eaff, #fff0f5);
+    border-radius: 16px;
+}
+
+.encabezado-chat h2 {
+    font-size: 30px;
+    font-weight: bold;
+    margin: 0 0 8px;
+}
+
+.encabezado-chat p {
+    margin: 0;
+    color: #77749e;
+}
+
+.icono-encabezado {
+    font-size: 42px;
+}
+
+/* Área de publicaciones */
+.area-chat {
+    flex: 1;
+    min-height: 320px;
+    padding: 25px;
+    background-color: #fff;
+    border: 1px solid #e2ddff;
+    border-radius: 14px;
+}
+
+/* Mensaje inicial */
+.mensaje-vacio {
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.iconos-vacios {
+    font-size: 65px;
+    margin-bottom: 15px;
+}
+
+.mensaje-vacio h4 {
+    font-weight: bold;
+    color: #7770b5;
+}
+
+.mensaje-vacio p {
+    color: #9292b0;
+}
+
+/* Formulario */
+.formulario {
+    padding: 22px;
+    background: linear-gradient(120deg, #f5f2ff, #fff4f7);
+    border: 1px solid #e5ddff;
+    border-radius: 14px;
+}
+
+.formulario label {
+    font-weight: bold;
+    color: #292653;
+}
+
+.formulario .form-control {
     padding: 12px;
-    height: 60vh;
-    overflow-y: auto;
-    margin-bottom: 20px;
+    border: 1px solid #dcd7fa;
+    border-radius: 9px;
 }
 
-.publicacion {
-    padding: 5px 0;
-    margin-bottom: 8px;
+.formulario .form-control:focus {
+    border-color: #a493f5;
+    box-shadow: 0 0 0 3px rgba(164, 147, 245, 0.15);
 }
 
-.respuesta {
-    margin-left: 18px;
-    padding-left: 10px;
-    border-left: 2px solid #b9a5ed;
-}
-
-.nombre-usuario {
+/* Botón publicar */
+.boton-publicar {
+    padding: 12px 22px;
+    color: white;
+    background: linear-gradient(110deg, #8971eb, #b17be8);
+    border: none;
+    border-radius: 12px;
     font-weight: bold;
-    margin-bottom: 3px;
+}
+
+.boton-publicar:hover {
+    color: white;
+    background: linear-gradient(110deg, #735bd4, #9c63d5);
+}
+
+/* Adaptación para celulares */
+@media (max-width: 850px) {
+    .pagina {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .panel-temas {
+        width: 100%;
+        max-width: none;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+    .panel-conversacion {
+        padding: 12px;
+    }
+
+    .encabezado-chat h2 {
+        font-size: 23px;
+    }
+
+    .icono-encabezado {
+        font-size: 30px;
+    }
+}
+
+
+/* Tarjetas de chismes */
+.publicacion {
+    background: white;
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 16px;
+    border: 1px solid #e6e0fa;
+    box-shadow: 0 3px 10px rgba(117, 99, 217, 0.08);
+}
+
+/* Texto del chisme */
+.mensaje-texto {
+    margin: 10px 0 14px;
+    color: #45405c;
+    overflow-wrap: anywhere;
+}
+
+/* Botón responder */
+.btn-responder {
+    background-color: #7563d9;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.btn-responder:hover {
+    background-color: #5e4bc2;
+    transform: translateY(-1px);
+}
+
+/* Formulario de respuesta */
+.form-respuesta {
+    background: #f8f6ff;
+    border: 1px solid #e6e0fa;
+    border-radius: 12px;
+    padding: 14px;
+    margin-top: 14px;
+}
+
+/* Campos de texto */
+.form-respuesta input,
+.form-respuesta textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #d8cff7;
+    border-radius: 8px;
+    padding: 10px 12px;
+    background-color: white;
+    color: #45405c;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Efecto al seleccionar un campo */
+.form-respuesta input:focus,
+.form-respuesta textarea:focus {
+    border-color: #7563d9;
+    box-shadow: 0 0 0 3px rgba(117, 99, 217, 0.15);
+}
+
+/* Área para escribir la respuesta */
+.form-respuesta textarea {
+    min-height: 85px;
+    resize: vertical;
+}
+
+/* Botón para enviar la respuesta */
+.form-respuesta button[type="submit"] {
+    background-color: #7563d9;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.form-respuesta button[type="submit"]:hover {
+    background-color: #5e4bc2;
+}
+
+/* Respuestas publicadas */
+.respuesta {
+    margin: 0 0 14px 22px;
+    padding-left: 14px;
+    border-left: 3px solid #b9aaf5;
+}
+
+
+/* Cada publicación */
+.publicacion {
+    background-color: #f4f0ff;
+    border: 1px solid #e4dcff;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 12px;
+    overflow-wrap: anywhere;
+}
+
+.publicacion strong {
+    color: #5546a8;
 }
 
 .mensaje-texto {
-    margin-bottom: 4px;
+    margin: 8px 0;
     white-space: pre-wrap;
 }
 
+/* Botón responder */
 .btn-responder {
     border: none;
-    background: none;
-    color: #7055c9;
-    padding: 2px 0;
+    background: #e5ddff;
+    color: #604fc2;
+    padding: 6px 12px;
+    border-radius: 8px;
     cursor: pointer;
 }
 
 .btn-responder:hover {
-    text-decoration: underline;
+    background: #d5c9ff;
 }
 
-.formulario {
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 15px;
+/* Respuestas debajo del mensaje original */
+.lista-respuestas {
+    margin-left: 25px;
+    padding-left: 12px;
+    border-left: 3px solid #d9cafa;
 }
+
+/* Aviso de respuesta dentro del formulario inferior */
+.respondiendo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background-color: #eee8ff;
+    border-left: 4px solid #8871eb;
+    border-radius: 9px;
+    padding: 10px 14px;
+    margin-bottom: 18px;
+}
+
+.respondiendo[hidden] {
+    display: none;
+}
+
+.respondiendo strong {
+    display: block;
+    color: #6652c4;
+    font-size: 14px;
+}
+
+.respondiendo p {
+    margin: 4px 0 0;
+    color: #66617e;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.boton-cancelar {
+    border: none;
+    background: transparent;
+    color: #6652c4;
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px 8px;
+    flex-shrink: 0;
+}
+
+.boton-cancelar:hover {
+    color: #d44970;
+}
+
+
+/* Temas sin iconos */
+.tema {
+    padding: 16px;
+    margin-bottom: 8px;
+    background-color: #ffffff;
+    border: 1px solid #eee8fb;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.tema:hover {
+    background-color: #faf5ff;
+}
+
+.tema.activo {
+    background-color: #eee8ff;
+    border-left: 5px solid #8871eb;
+}
+
+.info-tema h5 {
+    font-size: 16px;
+    margin: 0 0 6px;
+    font-weight: bold;
+}
+
+.info-tema p {
+    font-size: 13px;
+    color: #777b9e;
+    margin: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* Formulario de nuevo tema */
+.form-nuevo-tema {
+    padding: 15px;
+    margin-top: 12px;
+    background-color: #f5f0ff;
+    border: 1px solid #e2d8ff;
+    border-radius: 12px;
+}
+
+.form-nuevo-tema[hidden] {
+    display: none;
+}
+
+.form-nuevo-tema label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.botones-tema {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
+
+.botones-tema .btn {
+    font-size: 13px;
+}
+
+
+.tema {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.info-tema {
+    flex: 1;
+    min-width: 0;
+}
+
+.boton-eliminar-tema {
+    border: none;
+    background: transparent;
+    color: #999;
+    font-size: 23px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 2px 8px;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.boton-eliminar-tema:hover {
+    background-color: #ffe4e8;
+    color: #d63354;
+}
+
